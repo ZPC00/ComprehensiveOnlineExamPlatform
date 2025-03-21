@@ -27,7 +27,7 @@ function PracticeGrades() {
         setUserAccount(userAccountDemo);
       }
       else{
-        axios.get('/userAccount')
+        axios.get('https://comprehensiveonlineexamplatformbackend.onrender.com/userAccount')
           .then(response => {
             setUserAccount(response.data);
             })

@@ -33,7 +33,7 @@ function ExamManagement() {
         setExamFillingBlankBankLengh(examBankDemo.filter(q => q.type === "Filling Blank").length)
         setExamJudgementsBankLengh(examBankDemo.filter(q => q.type === "Judgements").length)
     }else{
-    axios.get('/getExamModes')
+    axios.get('https://comprehensiveonlineexamplatformbackend.onrender.com/getExamModes')
       .then(response => {
         setExamModes(response.data.examModesData);
         setExamSingleChoiceBankLengh(response.data.examSingleChoiceBankLengh);
@@ -86,7 +86,7 @@ function ExamManagement() {
       setError("");
     }else{
     axios
-    .post("/updateExamMode", examModes)
+    .post("https://comprehensiveonlineexamplatformbackend.onrender.com/updateExamMode", examModes)
     .then(response => {
       setSuccess(response.data.message);
       fetchExamModes()

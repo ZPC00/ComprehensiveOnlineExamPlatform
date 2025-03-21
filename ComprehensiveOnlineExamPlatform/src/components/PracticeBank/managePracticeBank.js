@@ -86,7 +86,7 @@ function ManagePracticeBank() {
       }
       else{
         axios
-          .post('/deletePracticeQuestion', { id })
+          .post('https://comprehensiveonlineexamplatformbackend.onrender.com/deletePracticeQuestion', { id })
         .then((response) => {
           setPracticeBank(response.data.updatedPracticeQuestion);
           setOutSuccess(response.data.message);
@@ -165,7 +165,7 @@ function ManagePracticeBank() {
       }
       else{
         axios
-          .post("/savePracticeQusetion", updatedInfo)
+          .post("https://comprehensiveonlineexamplatformbackend.onrender.com/savePracticeQusetion", updatedInfo)
         .then((response) => {
           setPracticeBank(response.data.updatedPracticeQuestion);
           setOutSuccess(response.data.message);
@@ -201,7 +201,7 @@ function ManagePracticeBank() {
       // send backend to update
       else{
         axios
-          .post("/savePracticeQusetion", updatedInfo )
+          .post("https://comprehensiveonlineexamplatformbackend.onrender.com/savePracticeQusetion", updatedInfo )
           .then((response) => {
           setPracticeBank(response.data.updatedPracticeQuestion);
           setOutSuccess(response.data.message);
@@ -275,7 +275,7 @@ function ManagePracticeBank() {
       }
       else{
         axios
-          .post("/excelPracticeUpdate", excelUpdateData)
+          .post("https://comprehensiveonlineexamplatformbackend.onrender.com/excelPracticeUpdate", excelUpdateData)
         .then((response) => {
           setPracticeBank(response.data.updatedPracticeQuestion);
           alert(`${response.data.message} Please review the correctness of these questions!`);

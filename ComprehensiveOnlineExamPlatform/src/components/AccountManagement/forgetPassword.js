@@ -65,7 +65,7 @@ function ForgetPassword() {
           }
         }
         else{
-          const response = await axios.post("/matchUserInfo", { username: forgetPassword1 });
+          const response = await axios.post("https://comprehensiveonlineexamplatformbackend.onrender.com/matchUserInfo", { username: forgetPassword1 });
           user = response.data.matchUser;
           setMatchUser(user); 
         }
@@ -162,7 +162,7 @@ function ForgetPassword() {
       }, 3000);
     }
     else{
-      const response = await axios.post("/updatePassword", passwordData);
+      const response = await axios.post("https://comprehensiveonlineexamplatformbackend.onrender.com/updatePassword", passwordData);
       if(response.status===200){
       setSuccessMessage("Password reset successful!");
       setTimeout(() => {

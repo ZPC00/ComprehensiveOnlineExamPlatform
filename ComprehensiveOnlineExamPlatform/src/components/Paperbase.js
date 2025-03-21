@@ -9,7 +9,7 @@ function Copyright() {
   return (
     <Typography variant="body2" align="center" sx={{ color: 'text.secondary' }}>
       {'Copyright © '}
-      <Link color="inherit" href="https://www.clarku.edu/">
+      <Link color="inherit" href="https://comprehensiveonlineexamplatform.onrender.com">
       Comprehensive Online Exam Platform
       </Link>{' '}
       {new Date().getFullYear()}.

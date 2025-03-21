@@ -74,7 +74,7 @@ function Exam() {
     if(demoMode){
       setExamModes(examModesDemo);
     }else{
-      axios.get('/getExamModes')
+      axios.get('https://comprehensiveonlineexamplatformbackend.onrender.com/getExamModes')
         .then(response => {
           setExamModes(response.data.examModesData);
           })
@@ -203,7 +203,7 @@ const handleSubmitExam = async () => {
     }
   }else{
     axios
-      .post("/updateExamResult", newExamResultInfo)
+      .post("https://comprehensiveonlineexamplatformbackend.onrender.com/updateExamResult", newExamResultInfo)
     .then((response) => {
       setExamRuningState(false);
       console.log(response)
@@ -253,7 +253,7 @@ const handleSubmitExam = async () => {
     setExamRuningState(true);
 
   }else{
-    axios.post('/getExamPaperQuestion',{username})
+    axios.post('https://comprehensiveonlineexamplatformbackend.onrender.com/getExamPaperQuestion',{username})
        .then(response => {
         setExamPaperQuestions(response.data.examPaperQuestions);
         const initializationAttempts = response.data.examPaperQuestions.map((question) => ({
@@ -294,7 +294,7 @@ const handleViewUserResult = (userName)=>{
 
   }else{ 
   axios
-    .post('/viewUserDetailResult', { userName })
+    .post('https://comprehensiveonlineexamplatformbackend.onrender.com/viewUserDetailResult', { userName })
     .then((response) => {
       setExamPaperQuestions(response.data.examPaperQuestions)
       setAttempts(response.data.attempts)

@@ -29,7 +29,7 @@ function ExamGrades() {
     if(demoMode){
       setUserAccount(userAccountDemo);
     }else{
-      axios.get('/userAccount')
+      axios.get('https://comprehensiveonlineexamplatformbackend.onrender.com/userAccount')
         .then(response => {
           setUserAccount(response.data);
           })
@@ -128,7 +128,7 @@ function ExamGrades() {
         }, 3000);
       }else{
         axios
-        .post('/deleteUserGrades', { userName })
+        .post('https://comprehensiveonlineexamplatformbackend.onrender.com/deleteUserGrades', { userName })
         .then((response) => {
           setUserAccount(response.data.updatedUserAccount);
           setOutSuccess(response.data.message);
@@ -164,7 +164,7 @@ function ExamGrades() {
         setOpenUserResult(true);
       }else{
         axios
-          .post('/viewUserDetailResult', { userName })
+          .post('https://comprehensiveonlineexamplatformbackend.onrender.com/viewUserDetailResult', { userName })
           .then((response) => {
           setExamPaperQuestions(response.data.examPaperQuestions)
           setAttempts(response.data.attempts)
@@ -214,7 +214,7 @@ function ExamGrades() {
           }, 3000);
         }else{
           axios
-          .get('/deleteAllUserGrades',)
+          .get('https://comprehensiveonlineexamplatformbackend.onrender.com/deleteAllUserGrades')
           .then((response) => {
             setUserAccount(response.data.updatedUserAccount);
             setOutSuccess(response.data.message);

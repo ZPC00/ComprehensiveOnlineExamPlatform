@@ -107,7 +107,7 @@ export default function Navigator(props) {
           setUserAccountDemo(userAccountDemo.map(user => user.name === username ? 
             {...user, examGradesList: [...user.examGradesList, 0 ]} : user));
         }else 
-          axios.post('/matchUserInfo',{username:username})
+          axios.post('https://comprehensiveonlineexamplatformbackend.onrender.com/matchUserInfo',{username:username})
             .then(response => {
             setCurrentUserInfor(response.data.matchUser);
             })

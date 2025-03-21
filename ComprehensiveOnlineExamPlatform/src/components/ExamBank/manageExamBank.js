@@ -33,7 +33,7 @@ function ManageExamBank() {
       if(demoMode){
         setExamBank(examBankDemo)
       }else{
-        axios.get('/getExamBank')
+        axios.get('https://comprehensiveonlineexamplatformbackend.onrender.com/getExamBank')
           .then(response => {
          setExamBank(response.data);
     })
@@ -97,7 +97,7 @@ function ManageExamBank() {
           setSelectedQuestion("")
       }else{
         axios
-          .post('https://exampracticesystem-backend.onrender.com/deleteExamQuestion', { id })
+          .post('https://comprehensiveonlineexamplatformbackend.onrender.com/deleteExamQuestion', { id })
         .then((response) => {
           setExamBank(response.data.updatedExamQuestion);
           setOutSuccess(response.data.message);
@@ -176,7 +176,7 @@ function ManageExamBank() {
       }else{
       // send backend to update
       axios
-        .post("https://exampracticesystem-backend.onrender.com/saveExamQusetion", updatedInfo)
+        .post("https://comprehensiveonlineexamplatformbackend.onrender.com/saveExamQusetion", updatedInfo)
         .then((response) => {
           setExamBank(response.data.updatedExamQuestion);
           setOutSuccess(response.data.message);
@@ -210,7 +210,7 @@ function ManageExamBank() {
           setSelectedQuestion("")
       }else{
         axios
-          .post("https://exampracticesystem-backend.onrender.com/saveExamQusetion", updatedInfo )
+          .post("https://comprehensiveonlineexamplatformbackend.onrender.com/saveExamQusetion", updatedInfo )
         .then((response) => {
           setExamBank(response.data.updatedExamQuestion);
           setOutSuccess(response.data.message);
@@ -282,7 +282,7 @@ function ManageExamBank() {
         alert(`upload ${excelUpdateData.length} questions successfully! Please review the correctness of these questions!`);
       }else{
         axios
-          .post("https://exampracticesystem-backend.onrender.com/excelExamUpdate", excelUpdateData)
+          .post("https://comprehensiveonlineexamplatformbackend.onrender.com/excelExamUpdate", excelUpdateData)
         .then((response) => {
           setExamBank(response.data.updatedExamQuestion);
           alert(`${response.data.message} Please review the correctness of these questions!`);

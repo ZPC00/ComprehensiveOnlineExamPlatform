@@ -28,7 +28,7 @@ export const AppProvider = ({ children }) => {
          setIsloading(false);
       }
       else{
-        axios.get('/getPracticeBank')
+        axios.get('https://comprehensiveonlineexamplatformbackend.onrender.com/getPracticeBank')
           .then(response => {
             setPracticeBank(response.data);
             setIsloading(false)
@@ -48,7 +48,7 @@ export const AppProvider = ({ children }) => {
         }
       }
       else{
-        axios.post('/matchUserInfo',{username:username})
+        axios.post('https://comprehensiveonlineexamplatformbackend.onrender.com/matchUserInfo',{username:username})
          .then(response => {
           if(response.data.matchUser){
               setCurrentUserInfor(response.data.matchUser);
@@ -64,7 +64,7 @@ export const AppProvider = ({ children }) => {
     // initialize demo data
     const initializeDemoData = async () => {
         try {
-            await axios.get('/getDemoData')
+            await axios.get('https://comprehensiveonlineexamplatformbackend.onrender.com/getDemoData')
             .then(response => {
                 const { userAccountDemo, practiceBankDemo, examBankDemo, examModesDemo } = response.data;
                 setUserAccountDemo(userAccountDemo);  
