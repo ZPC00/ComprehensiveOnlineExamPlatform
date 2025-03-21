@@ -12,7 +12,7 @@ const HomePage = () => {
   return (
     <div
       style={{
-          backgroundImage: "url('https://comprehensiveonlineexamplatformbackend.onrender.com/images/HomePage.jpg')",
+          backgroundImage: "url(public/HomePage.jpg)",
           backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
         height: "100vh",
