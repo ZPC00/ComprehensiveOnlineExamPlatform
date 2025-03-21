@@ -15,7 +15,7 @@ app.use('/images', express.static('images'))
 app.use('/files', express.static('files'))
 
 
-const uri = process.env.MONGODB_URI_Main
+const uri = process.env.MONGODB_URI
 
 const corsOptions = {
     origin: '*',
