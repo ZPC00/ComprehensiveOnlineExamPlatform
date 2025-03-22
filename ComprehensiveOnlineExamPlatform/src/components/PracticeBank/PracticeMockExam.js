@@ -82,12 +82,7 @@ function PracticeMockExam() {
   const handleSubmitUserAnswer = (QuestionType) => {
     let handleUserAnswer = userAnswer;
     let handleCorrectAnswer = currentQuestion.correctAnswer;
-    
-    // sort the correct answer letters to compare the correctness of the questions it its type is Choice
-    if (QuestionType === "Single Choice" || QuestionType === "Multiple Choice") {
-      handleUserAnswer = userAnswer.split("").sort().join("").toUpperCase();
-      handleCorrectAnswer = currentQuestion.correctAnswer.split("").sort().join("").toUpperCase();
-    }
+
     
     // define the correctness of users' answers
     const correctness = handleUserAnswer === handleCorrectAnswer;
@@ -130,10 +125,6 @@ const handleSubmitExam = () => {
   if (submitted) return; // avoid submit twice
     setSubmitted(true);
 
-  // Ensure the current user's answer is stored if it's different
-  if (attempts[currentIndex].userAnswer !== userAnswer) {
-    handleSubmitUserAnswer(currentQuestion.type);
-  }
   // Calculate Practice Score and Incorrect Questions List
   const PracticeScore = attempts.filter((a) => a.correctness).length;
   const IncorrectQIDList = attempts.filter((a) => !a.correctness).map((a) => a.qID);
@@ -359,8 +350,8 @@ const handleSubmitExam = () => {
           <RadioGroup
             value={userAnswer}
             onChange={(e) => {
-
                 setUserAnswer(e.target.value);
+                setShowSubmitBottun(false)
               }
             }
           >
@@ -390,6 +381,7 @@ const handleSubmitExam = () => {
                             setUserAnswer((prev) =>
                               e.target.checked ? prev + option : prev.replace(option, "")
                             );
+                            setShowSubmitBottun(false)
                           }
                         }
                       />
@@ -407,7 +399,10 @@ const handleSubmitExam = () => {
             variant="outlined"
             fullWidth
             value={userAnswer}
-            onChange={(e) => setUserAnswer(e.target.value)}
+            onChange={(e) => {
+              setUserAnswer(e.target.value);
+              setShowSubmitBottun(false)
+            }}
             margin="normal"
           />
         )}
@@ -419,6 +414,7 @@ const handleSubmitExam = () => {
             onChange={(e) => {
               // only handle no answered question
                 setUserAnswer(e.target.value);
+                setShowSubmitBottun(false)
               }
             }
           >
@@ -431,7 +427,7 @@ const handleSubmitExam = () => {
         <Button variant="outlined" color="secondary" onClick={() => {
             if (showSubmitBottun) {
               if (window.confirm("Submission can't be rolled back, are you sure?")) {
-                handleSubmitExam();                                                      // Call submit exam if confirmed
+                handleSubmitExam();                                                       // Call submit exam if confirmed
               }
             } else {
               handleNext();                                                              // Call next if not submitting
