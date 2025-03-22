@@ -83,7 +83,11 @@ function PracticeMockExam() {
     let handleUserAnswer = userAnswer;
     let handleCorrectAnswer = currentQuestion.correctAnswer;
 
-    
+    // sort the correct answer letters to compare the correctness of the questions it its type is Choice
+    if (QuestionType === "Single Choice" || QuestionType === "Multiple Choice") {
+      handleUserAnswer = userAnswer.split("").sort().join("").toUpperCase();
+      handleCorrectAnswer = currentQuestion.correctAnswer.split("").sort().join("").toUpperCase();
+    }
     // define the correctness of users' answers
     const correctness = handleUserAnswer === handleCorrectAnswer;
     
