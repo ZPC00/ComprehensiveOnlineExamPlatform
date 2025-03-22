@@ -139,7 +139,7 @@ export default function Navigator(props) {
       <List disablePadding>
         {/* Drawer Title */}
         <ListItem sx={{ ...item, ...itemCategory, fontSize: 22, color: '#fff' }}>
-         Welcome
+        Testopia
         </ListItem>
         
         {/* Project Overview */}

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { AppBar, Grid, IconButton, Link, Toolbar, Tooltip, Typography } from '@mui/material';
-import { Help as HelpIcon, Menu as MenuIcon, Notifications as NotificationsIcon } from '@mui/icons-material';
+import { AppBar, Grid, IconButton, Link, Toolbar, Tooltip } from '@mui/material';
+import { Menu as MenuIcon, Notifications as NotificationsIcon } from '@mui/icons-material';
 import { useContext } from 'react';
 import { AppContext } from './AppContext';
 import Account from './AccountManagement/Account';
@@ -77,24 +77,6 @@ function Header(props) {
         elevation={0}
         sx={{ zIndex: 0 }}
       >
-        <Toolbar>
-          <Grid container spacing={1} sx={{ alignItems: 'center' }}>
-            <Grid item xs>
-              <Typography color="inherit" variant="h5" component="h1" fontWeight="bold">
-              Comprehensive Online Exam Platform
-              </Typography>
-            </Grid>
-            <Grid item>
-
-              {/*help icon*/}
-              <Tooltip title="Help">
-                <IconButton color="inherit">
-                  <HelpIcon />
-                </IconButton>
-              </Tooltip>
-            </Grid>
-          </Grid>
-        </Toolbar>
       </AppBar>
     </React.Fragment>
   );

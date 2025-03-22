@@ -1,11 +1,10 @@
-import React, { useState, useContext } from 'react';
-import { Table, TableBody, TableCell, TableHead, TableRow, Typography, Pagination, IconButton,Tooltip, Alert, TextField, Button, Dialog, DialogActions, DialogContent, DialogTitle, Autocomplete } from '@mui/material';
-import { UploadFile as UploadFileIcon, Edit as EditIcon, Delete as DeleteIcon, ReportProblem as ReportProblemIcon,AddCircleOutline as AddCircleOutlineIcon, ImageOutlined as ImageOutlinedIcon} from '@mui/icons-material';
+import React, { useState, useEffect, useContext } from 'react'; 
+import { Table, TableBody, TableCell, TableHead, TableRow, Typography, Pagination, IconButton, Tooltip, Alert, TextField, Button, Dialog, DialogActions, DialogContent, DialogTitle, Autocomplete } from '@mui/material';
+import { UploadFile as UploadFileIcon, Edit as EditIcon, Delete as DeleteIcon, ReportProblem as ReportProblemIcon, AddCircleOutline as AddCircleOutlineIcon, ImageOutlined as ImageOutlinedIcon } from '@mui/icons-material';
 import PropTypes from 'prop-types';
-import { AppContext } from '../AppContext';
 import axios from 'axios';
 import * as XLSX from 'xlsx';
-
+import { AppContext } from '../AppContext';
 
 function Title({ children }) {
   return (
@@ -19,21 +18,34 @@ Title.propTypes = {
   children: PropTypes.node,
 };
 
-function ManagePracticeBank() {
-  // Context to get and set practice questions
-  const { practiceBank, setPracticeBank, demoMode } = useContext(AppContext);
-  
+function ManageExamBank() {
+  const { demoMode, examBankDemo, setExamBankDemo } = useContext(AppContext);
   // success or error alert
   const [outSuccess, setOutSuccess] = useState(null);
   const [error, setError] = useState("");
 
   // confirmation module
   const [showConfirmation, setShowConfirmation] = useState("");
+  const [examBank,setExamBank]=useState([]);
+
+  //load the exam question from back end service
+    useEffect(() => {
+      if(demoMode){
+        setExamBank(examBankDemo)
+      }else{
+        axios.get('https://testopiabackend.onrender.com/getExamBank')
+          .then(response => {
+         setExamBank(response.data);
+    })
+        .catch(error => {
+        console.error('Error fetching product data:', error);});
+      }
+    }, [demoMode, examBankDemo]);
   
   // Filter questions based on search term
   const [searchTerm, setSearchTerm] = useState("");
   
-  const filteredQuestion = practiceBank.filter(
+  const filteredQuestion = examBank.filter(
     (question) =>
       (question.Question && question.Question.toLowerCase().includes(searchTerm.toLowerCase())) ||
       (question.type && question.type.toLowerCase().includes(searchTerm.toLowerCase())) ||
@@ -51,9 +63,6 @@ function ManagePracticeBank() {
   const [selectedQuestion, setSelectedQuestion] = useState("");
   const [updatedInfo, setUpdatedInfo] = useState({});
 
-  // view detail of the image
-  const [viewImage, setViewImage] = useState(null)
-
   // Pagination
   const [page, setPage] = useState(1);
   const itemsPerPage = 11;
@@ -65,6 +74,9 @@ function ManagePracticeBank() {
     setPage(newPage);
   };
 
+  // view detail of the image
+  const [viewImage, setViewImage] = useState(null)
+
   // Handle deletion of a question with double click
   const handleDeleteQuestion = (id) => {
     if (!showConfirmation) {
@@ -75,7 +87,7 @@ function ManagePracticeBank() {
     } else {
       // delete and send backend to update
       if(demoMode){
-        setPracticeBank(practiceBank.filter(question => question.id !== id));
+        setExamBankDemo(examBankDemo.filter(question => question.id !== id));
         setOutSuccess("Delete question successfully!");
           setTimeout(() => {
             setOutSuccess("");
@@ -83,12 +95,11 @@ function ManagePracticeBank() {
           setIsEditingOrAdd(false);
           setUpdatedInfo({});
           setSelectedQuestion("")
-      }
-      else{
+      }else{
         axios
-          .post('https://comprehensiveonlineexamplatformbackend.onrender.com/deletePracticeQuestion', { id })
+          .post('https://testopiabackend.onrender.com/deleteExamQuestion', { id })
         .then((response) => {
-          setPracticeBank(response.data.updatedPracticeQuestion);
+          setExamBank(response.data.updatedExamQuestion);
           setOutSuccess(response.data.message);
           setTimeout(() => {
             setOutSuccess("");
@@ -135,10 +146,11 @@ function ManagePracticeBank() {
 
   // Function to save for adding or updating a question
   const handleSaveChanges = () => {
+
     // set the input fields based on question type
     if (
       !   (updatedInfo.Question && 
-      (  (updatedInfo.type==="Single Choice" && updatedInfo.A && updatedInfo.correctAnswer) || 
+       ( (updatedInfo.type==="Single Choice" && updatedInfo.A && updatedInfo.correctAnswer) || 
          (updatedInfo.type==="Multiple Choice" && updatedInfo.A && updatedInfo.B && updatedInfo.correctAnswer) ||
          (updatedInfo.type==="Filling Blank" && updatedInfo.correctAnswer) ||
          (updatedInfo.type==="Judgements" && (updatedInfo.correctAnswer === "True" || updatedInfo.correctAnswer === "False"))
@@ -152,9 +164,8 @@ function ManagePracticeBank() {
     }
     // update question which have id
     if (updatedInfo.id) {
-      // send backend to update
       if(demoMode){
-        setPracticeBank(practiceBank.map(question => question.id === updatedInfo.id ? updatedInfo : question));
+        setExamBankDemo(examBankDemo.map(question => question.id === updatedInfo.id ? updatedInfo : question));
         setOutSuccess("Update question successfully!");
           setTimeout(() => {
             setOutSuccess("");
@@ -162,12 +173,12 @@ function ManagePracticeBank() {
           setIsEditingOrAdd(false);
           setUpdatedInfo({});
           setSelectedQuestion("")
-      }
-      else{
-        axios
-          .post("https://comprehensiveonlineexamplatformbackend.onrender.com/savePracticeQusetion", updatedInfo)
+      }else{
+      // send backend to update
+      axios
+        .post("https://testopiabackend.onrender.com/saveExamQusetion", updatedInfo)
         .then((response) => {
-          setPracticeBank(response.data.updatedPracticeQuestion);
+          setExamBank(response.data.updatedExamQuestion);
           setOutSuccess(response.data.message);
           setTimeout(() => {
             setOutSuccess("");
@@ -183,13 +194,13 @@ function ManagePracticeBank() {
     } 
     // add question which means no id
     else {
-      // demo mode add question
+      // send backend to update
       if(demoMode){
         const newQuestion = { 
           ...updatedInfo,
-          id: practiceBank.length === 0 ? "00000001" : (Math.max(...practiceBank.map(question => question.id)) + 1).toString().padStart(8, '0')    
+          id: examBankDemo.length === 0 ? "00000001" : (Math.max(...examBankDemo.map(question => question.id)) + 1).toString().padStart(8, '0')    
         };
-        setPracticeBank([...practiceBank, newQuestion]);
+        setExamBankDemo([...examBankDemo, newQuestion]);
         setOutSuccess("Add question successfully!");
           setTimeout(() => {
             setOutSuccess("");
@@ -197,13 +208,11 @@ function ManagePracticeBank() {
           setIsEditingOrAdd(false);
           setUpdatedInfo({});
           setSelectedQuestion("")
-      }
-      // send backend to update
-      else{
+      }else{
         axios
-          .post("https://comprehensiveonlineexamplatformbackend.onrender.com/savePracticeQusetion", updatedInfo )
-          .then((response) => {
-          setPracticeBank(response.data.updatedPracticeQuestion);
+          .post("https://testopiabackend.onrender.com/saveExamQusetion", updatedInfo )
+        .then((response) => {
+          setExamBank(response.data.updatedExamQuestion);
           setOutSuccess(response.data.message);
           setTimeout(() => {
             setOutSuccess("");
@@ -220,7 +229,7 @@ function ManagePracticeBank() {
   };
 
   // Handle file upload for importting the questions
-  const handleFileUpload = async (event) => {
+  const handleFileUpload = (event) => {
     const file = event.target.files[0];
     if (!file) return;
   
@@ -252,9 +261,9 @@ function ManagePracticeBank() {
       }));
 
       // send to backend to update
-      if(demoMode){ 
+      if(demoMode){
         const newQuestions = excelUpdateData.map((question, index) => {
-          let newid = practiceBank.length === 0 ? "00000001" : (Math.max(...practiceBank.map(q => q.id)) + 1 + index).toString().padStart(8, '0');
+          let newid = examBankDemo.length === 0 ? "00000001" : (Math.max(...examBankDemo.map(q => q.id)) + 1 + index).toString().padStart(8, '0');
           return {
             id: newid,
             type: question.type,
@@ -269,25 +278,22 @@ function ManagePracticeBank() {
             inCorrectCount: 0,
           };
         });
-
-        setPracticeBank([...practiceBank, ...newQuestions]);
+        setExamBankDemo([...examBankDemo, ...newQuestions]);
         alert(`upload ${excelUpdateData.length} questions successfully! Please review the correctness of these questions!`);
-      }
-      else{
+      }else{
         axios
-          .post("https://comprehensiveonlineexamplatformbackend.onrender.com/excelPracticeUpdate", excelUpdateData)
+          .post("https://testopiabackend.onrender.com/excelExamUpdate", excelUpdateData)
         .then((response) => {
-          setPracticeBank(response.data.updatedPracticeQuestion);
+          setExamBank(response.data.updatedExamQuestion);
           alert(`${response.data.message} Please review the correctness of these questions!`);
         })
         .catch((error) => {
           console.error("Add question failed:", error);
-      });
+        });
       }
     };
     reader.readAsArrayBuffer(file);
   };
-
   
   return (
     <div>
@@ -329,7 +335,7 @@ function ManagePracticeBank() {
               Add Question
             </Button>
             <h1 style={{ flexGrow: 1, textAlign: "center", margin: 0 }}>
-              Practice Questions Management
+              Exam Questions Management
             </h1>
             <TextField
               label="Filter Questions"
@@ -339,7 +345,6 @@ function ManagePracticeBank() {
               onChange={(e) => {setPage(1);setSearchTerm(e.target.value)}}
               style={{ marginLeft: "auto" }}
           />
-          
           </div>
 
           {/* display questions table */}
@@ -373,9 +378,9 @@ function ManagePracticeBank() {
                           <ImageOutlinedIcon />
                             </IconButton>
                         </>
-                        )}{row.Question}
+                      )}{row.Question}
                     </TableCell>
-
+                    
                     <Dialog open={Boolean(viewImage)} onClose={() => setViewImage(null)}>
                       {viewImage && (
                         <img 
@@ -383,7 +388,7 @@ function ManagePracticeBank() {
                           alt="Preview" 
                           style={{ maxWidth: '700px', maxHeight: '500px' }} 
                         />
-                       )}
+                      )}
                     </Dialog>
                     <TableCell>{row.A}</TableCell>
                     <TableCell>{row.B}</TableCell>
@@ -415,6 +420,7 @@ function ManagePracticeBank() {
                         />
                       </Tooltip>
 
+                      {/*question format error and alert.*/}
                       {(() => {
                           let problemReport = "";
                           if (row.type === "Single Choice") {
@@ -479,69 +485,74 @@ function ManagePracticeBank() {
         <DialogTitle style={{ minWidth: '500px' }}>{selectedQuestion ? "Edit Question" : "Add New Question"}</DialogTitle>
         <DialogContent>
 
-          {/* only edit display and can't be modified*/}
-          {selectedQuestion&&(<TextField
+          {/* only edit display and can't be modified for the id*/}
+          {selectedQuestion&&(
+          <TextField
             label="Question ID"
             value={updatedInfo.id || ''}
             style={{ marginTop: '20px' }}
             fullWidth
-            InputProps={{ readOnly: true }}/>)}
+            InputProps={{ readOnly: true }}
+          />)}
 
           <Autocomplete
             disablePortal
             options={['Single Choice', 'Filling Blank', 'Multiple Choice','Judgements']}
             value={updatedInfo.type || ''}
-            onChange={(event, newValue) => setUpdatedInfo({ type: newValue })}      // reset the filling content when change the type
+            onChange={(event, newValue) => setUpdatedInfo({ ...updatedInfo, type: newValue, correctAnswer: '' })}      // reset the filling content when change the type
             style={{ marginTop: '20px' }}
             fullWidth
-            renderInput={(params) => <TextField {...params} label="Type" />}/>
+            renderInput={(params) => <TextField {...params} label="Type" />}
+          />
 
           <TextField
             label="Question Title"
             value={updatedInfo.Question || ''}
             onChange={(e) => setUpdatedInfo({ ...updatedInfo, Question: e.target.value })}
             style={{ marginTop: '20px' }}
-            fullWidth/>
+            fullWidth
+          />
 
           {/* only display which the type of quesiton is choice*/}
           {(updatedInfo.type === 'Single Choice' || updatedInfo.type === 'Multiple Choice')&&(
-          <div>
+        <div>
           <TextField
             label="A"
             value={updatedInfo.A || ''}
             onChange={(e) => setUpdatedInfo({ ...updatedInfo, A: e.target.value })}
             style={{ marginTop: '20px' }}
-            fullWidth/>
-
+            fullWidth
+          />
           <TextField
             label="B"
             value={updatedInfo.B || ''}
             onChange={(e) => setUpdatedInfo({ ...updatedInfo, B: e.target.value })}
             style={{ marginTop: '20px' }}
-            fullWidth/>
-
+            fullWidth
+          />
           <TextField
             label="C"
             value={updatedInfo.C || ''}
             onChange={(e) => setUpdatedInfo({ ...updatedInfo, C: e.target.value })}
             style={{ marginTop: '20px' }}
-            fullWidth/>
-
+            fullWidth
+          />
           <TextField
             label="D"
             value={updatedInfo.D || ''}
             onChange={(e) => setUpdatedInfo({ ...updatedInfo, D: e.target.value })}
             style={{ marginTop: '20px' }}
-            fullWidth/>
-
+            fullWidth
+          />
           <TextField
             label="E"
             value={updatedInfo.E || ''}
             onChange={(e) => setUpdatedInfo({ ...updatedInfo, E: e.target.value })}
             style={{ marginTop: '20px' }}
-            fullWidth/>
-          </div>
-          )}
+            fullWidth
+          />
+        </div>
+        )}
 
           {/* only display which the type of quesiton is single choice*/}
           {(updatedInfo.type === 'Single Choice')&&(
@@ -561,6 +572,7 @@ function ManagePracticeBank() {
                 label="Correct Answerer"
                 value={updatedInfo.correctAnswer || ''}
                 onChange={(e) => {
+                  // format rule check
                   const newValue = e.target.value.toUpperCase(); // Ensure it's uppercase
                   // Check if input contains only A, B, C, D, E (any combination)
                   const isValid = /^[ABCDE]+$/.test(newValue); // Regular expression to allow only ABCDE, at least 1 character
@@ -572,8 +584,8 @@ function ManagePracticeBank() {
                   }
                 }}
                 style={{ marginTop: '20px' }}
-                fullWidth/>
-
+                fullWidth
+              />
             )
           }
 
@@ -584,8 +596,8 @@ function ManagePracticeBank() {
             value={updatedInfo.correctAnswer || ''}
             onChange={(e) => setUpdatedInfo({ ...updatedInfo, correctAnswer: e.target.value })}
             style={{ marginTop: '20px' }}
-            fullWidth/> 
-          )}
+            fullWidth
+          /> )}
 
           {/* only display which the type of quesiton is Judgements*/}
           {(updatedInfo.type === 'Judgements')&&(
@@ -596,8 +608,8 @@ function ManagePracticeBank() {
             onChange={(event, newValue) => setUpdatedInfo({ ...updatedInfo, correctAnswer: newValue })}
             style={{ marginTop: '20px' }}
             fullWidth
-            renderInput={(params) => <TextField {...params} label="Correct Answerer" />}/>
-          )}
+            renderInput={(params) => <TextField {...params} label="Correct Answerer" />}
+          />)}
 
           <TextField
           label="Description"
@@ -605,7 +617,8 @@ function ManagePracticeBank() {
           multiline
           onChange={(e) => setUpdatedInfo({ ...updatedInfo, description: e.target.value })}
           style={{ marginTop: '20px' }}
-          fullWidth/>
+          fullWidth
+        />
 
           {/* Image Upload Section */}
           <div style={{ marginTop: '20px' }}>
@@ -630,7 +643,7 @@ function ManagePracticeBank() {
               </div>
             )}
           </div>
-
+          
           {/* error allert to notice the users*/}
           {error && (
           <Alert variant="outlined" severity="error" style={{ marginTop: '20px' }}>
@@ -650,4 +663,4 @@ function ManagePracticeBank() {
   );
 }
 
-export default ManagePracticeBank;
+export default ManageExamBank;

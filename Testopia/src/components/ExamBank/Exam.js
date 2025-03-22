@@ -217,8 +217,6 @@ const handleSubmitExam = async () => {
   if (window.confirm("The exam can't be suspended during the process, are you sure?")){
   if(demoMode){
 
-    const loginUser = userAccountDemo.find(user => user.name === username);
-
     // Shuffle and filter questions
     const singleChoiceBank = _.shuffle(examBankDemo.filter(q => q.type === "Single Choice"));
     const multipleChoiceBank = _.shuffle(examBankDemo.filter(q => q.type === "Multiple Choice"));
