@@ -57,7 +57,7 @@ function DisplayAccountInfo() {
           } 
           // update the user's password
           userAccountDemo.find(user => user.id === matchUser.id).password = passwordData.newPassword1;
-          setOutSuccess("Password reset successful!");
+          setOutSuccess("Password updated successfully!");
           setUpdatePassword(false);
           setUpdatePasswordInfo({});
           setTimeout(() => {
