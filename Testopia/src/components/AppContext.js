@@ -48,8 +48,9 @@ export const AppProvider = ({ children }) => {
         }
       }
       else{
+        
         axios.post('https://testopiabackend.onrender.com/matchUserInfo',{username:username})
-         .then(response => {1
+         .then(response => {
           if(response.data.matchUser){
               setCurrentUserInfor(response.data.matchUser);
             }})
