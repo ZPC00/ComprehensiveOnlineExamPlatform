@@ -138,8 +138,8 @@ export default function Navigator(props) {
     >
       <List disablePadding>
         {/* Drawer Title */}
-        <ListItem sx={{ ...item, ...itemCategory, fontSize: 22, color: '#fff' }}>
-        <button onClick={()=>{setfuncts(<HomePage/>)}}>Testopia</button>
+        <ListItem sx={{ ...item, ...itemCategory, fontSize: 22, color: '#fff' }} onClick={() => { handleModuleClick(HomePage) }}>
+            Testopia
         </ListItem>
         
         {/* Project Overview */}
