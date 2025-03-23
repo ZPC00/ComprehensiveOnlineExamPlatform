@@ -70,7 +70,7 @@ function DisplayAccountInfo() {
       }
     else{
       await axios
-      .post("https://comprehensiveonlineexamplatformbackend.onrender.com/updatePassword", passwordData )
+      .post("https://testopiabackend.onrender.com/updatePassword", passwordData )
       .then((response) => {
         setCurrentUserInfor(response.data.updatedCurrentUser);
         setOutSuccess(response.data.message);       

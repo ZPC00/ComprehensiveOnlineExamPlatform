@@ -32,7 +32,7 @@ function AccountMangement() {
       setUserAccount(userAccountDemo);
     }
     else{
-      axios.get('https://comprehensiveonlineexamplatformbackend.onrender.com/userAccount')
+      axios.get('https://testopiabackend.onrender.com/userAccount')
         .then(response => {
           setUserAccount(response.data);
           })
@@ -95,7 +95,7 @@ function AccountMangement() {
         }, 3000);
       } 
       axios
-        .post("https://comprehensiveonlineexamplatformbackend.onrender.com/deleteUser", { userName })
+        .post("https://testopiabackend.onrender.com/deleteUser", { userName })
         .then((response) => {
           setUserAccount(response.data.updatedUserAccount);
           setOutSuccess(response.data.message);
@@ -159,7 +159,7 @@ function AccountMangement() {
         }, 3000);
       }else{
       axios
-        .post("https://comprehensiveonlineexamplatformbackend.onrender.com/saveUser", updatedInfo)
+        .post("https://testopiabackend.onrender.com/saveUser", updatedInfo)
         .then((response) => {
           setUserAccount(response.data.updatedUserAccount);
           setOutSuccess(response.data.message);
@@ -190,7 +190,7 @@ function AccountMangement() {
         }, 3000);
       }else{
       axios
-        .post("https://comprehensiveonlineexamplatformbackend.onrender.com/saveUser", updatedInfo )
+        .post("https://testopiabackend.onrender.com/saveUser", updatedInfo )
         .then((response) => {
           console.log(response)
           setUserAccount(response.data.updatedUserAccount);

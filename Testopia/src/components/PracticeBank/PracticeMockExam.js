@@ -161,7 +161,7 @@ const handleSubmitExam = () => {
   }else{
     // Send the exam result to the server
     axios
-      .post("https://comprehensiveonlineexamplatformbackend.onrender.com/updatePracticeResult", newExamResultInfo)
+      .post("https://testopiabackend.onrender.com/updatePracticeResult", newExamResultInfo)
     .then((response) => {
       setCurrentUserInfor(response.data.updatedCurrentUser);
       setTimeout(() => {

@@ -22,7 +22,7 @@ function ForgetPassword() {
   // State for error or success message
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  
+
   // State to track whether the user has passed the first step of verification
   const [resetPasswordState, setResetPasswordState] = useState(false);
 
@@ -65,7 +65,7 @@ function ForgetPassword() {
           }
         }
         else{
-          const response = await axios.post("https://comprehensiveonlineexamplatformbackend.onrender.com/matchUserInfo", { username: forgetPassword1 });
+          const response = await axios.post("https://testopiabackend.onrender.com/matchUserInfo", { username: forgetPassword1 });
           user = response.data.matchUser;
           setMatchUser(user); 
         }
@@ -162,7 +162,7 @@ function ForgetPassword() {
       }, 3000);
     }
     else{
-      const response = await axios.post("https://comprehensiveonlineexamplatformbackend.onrender.com/updatePassword", passwordData);
+      const response = await axios.post("https://testopiabackend.onrender.com/updatePassword", passwordData);
       if(response.status===200){
       setSuccessMessage("Password reset successful!");
       setTimeout(() => {

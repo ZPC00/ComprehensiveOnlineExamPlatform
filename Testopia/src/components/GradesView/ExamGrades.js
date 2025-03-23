@@ -2,12 +2,14 @@ import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { DownloadForOffline as DownloadForOfflineIcon, Receipt as ReceiptIcon, Delete as DeleteIcon, DeleteForever as DeleteForeverIcon} from '@mui/icons-material';
 import axios from 'axios';
-import ExamResult from "../GradesView/ExamResult"
+import ExamResult from "./ExamResult"
 import { Table, TableBody, TableCell, TableHead, TableRow, Typography, Pagination, Tooltip, 
   Alert, TextField, Button, Dialog, DialogActions, DialogContent ,TableSortLabel
 } from '@mui/material';
 import * as XLSX from 'xlsx';
 import { AppContext } from '../AppContext';
+
+
 function Title({ children }) {
   return (
     <Typography component="h2" variant="h6" color="primary" gutterBottom>
@@ -29,7 +31,7 @@ function ExamGrades() {
     if(demoMode){
       setUserAccount(userAccountDemo);
     }else{
-      axios.get('https://comprehensiveonlineexamplatformbackend.onrender.com/userAccount')
+      axios.get('https://testopiabackend.onrender.com/userAccount')
         .then(response => {
           setUserAccount(response.data);
           })
@@ -128,7 +130,7 @@ function ExamGrades() {
         }, 3000);
       }else{
         axios
-        .post('https://comprehensiveonlineexamplatformbackend.onrender.com/deleteUserGrades', { userName })
+        .post('https://testopiabackend.onrender.com/deleteUserGrades', { userName })
         .then((response) => {
           setUserAccount(response.data.updatedUserAccount);
           setOutSuccess(response.data.message);
@@ -164,7 +166,7 @@ function ExamGrades() {
         setOpenUserResult(true);
       }else{
         axios
-          .post('https://comprehensiveonlineexamplatformbackend.onrender.com/viewUserDetailResult', { userName })
+          .post('https://testopiabackend.onrender.com/viewUserDetailResult', { userName })
           .then((response) => {
           setExamPaperQuestions(response.data.examPaperQuestions)
           setAttempts(response.data.attempts)
@@ -214,7 +216,7 @@ function ExamGrades() {
           }, 3000);
         }else{
           axios
-          .get('https://comprehensiveonlineexamplatformbackend.onrender.com/deleteAllUserGrades')
+          .get('https://testopiabackend.onrender.com/deleteAllUserGrades')
           .then((response) => {
             setUserAccount(response.data.updatedUserAccount);
             setOutSuccess(response.data.message);

@@ -18,7 +18,7 @@ import ManageExamBank from './ExamBank/manageExamBank'
 import ExamManagement from './ExamBank/examManagement';
 import Exam from './ExamBank/Exam'
 import ExamGrades from './GradesView/ExamGrades';
-
+import HomePage from './HomePage';
 
 const iconColor = 'rgba(255, 255, 255, 0.7)';
 
@@ -107,7 +107,7 @@ export default function Navigator(props) {
           setUserAccountDemo(userAccountDemo.map(user => user.name === username ? 
             {...user, examGradesList: [...user.examGradesList, 0 ]} : user));
         }else 
-          axios.post('https://comprehensiveonlineexamplatformbackend.onrender.com/matchUserInfo',{username:username})
+          axios.post('https://testopiabackend.onrender.com/matchUserInfo',{username:username})
             .then(response => {
             setCurrentUserInfor(response.data.matchUser);
             })
@@ -139,7 +139,7 @@ export default function Navigator(props) {
       <List disablePadding>
         {/* Drawer Title */}
         <ListItem sx={{ ...item, ...itemCategory, fontSize: 22, color: '#fff' }}>
-        Testopia
+        <button onClick={()=>{setfuncts(<HomePage/>)}}>Testopia</button>
         </ListItem>
         
         {/* Project Overview */}
