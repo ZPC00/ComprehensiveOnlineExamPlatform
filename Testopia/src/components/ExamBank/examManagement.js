@@ -77,7 +77,7 @@ function ExamManagement() {
     if(demoMode){
       if(!examModes.examStudentGradesVisible){
         let newExamModes = {...examModes, examStudentAnswerVisible: false}
-        setExamModes(newExamModes)
+        setExamModesDemo(newExamModes)
       }else{
         setExamModesDemo(examModes)
       }
