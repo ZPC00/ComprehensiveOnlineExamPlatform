@@ -18,7 +18,7 @@ app.use('/files', express.static('files'))
 const uri = process.env.MONGODB_URI
 
 const corsOptions = {
-    origin: '0.0.0.0',
+    origin: 'https://testopia.onrender.com/',
     credentials: true,
     maxAge: 200
 };
