@@ -25,6 +25,9 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.use('/', router);
+app.get('/', (req, res) => {
+  res.send('Hello World!')
+})
 
 //connect to server db
 const port = process.env.PORT || 3030;
