@@ -23,7 +23,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "proxy": "https://comprehensiveonlineexamplatformbackend.onrender.com/",
+  "proxy": "https://testopiabackend.onrender.com/",
   "eslintConfig": {
     "extends": [
       "react-app",
